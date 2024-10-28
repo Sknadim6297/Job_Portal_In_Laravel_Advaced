@@ -10,15 +10,17 @@ use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
-    //User Registration
+    // User Registration
     public function Register()
     {
         return view('front.account.register');
     }
+
     public function login()
     {
         return view('front.account.login');
     }
+
     public function processRegister(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -35,10 +37,9 @@ class AccountController extends Controller
             $user->password = Hash::make($request->password);
             $user->save();
 
+            // Flash success message and return JSON response for AJAX handling
             session()->flash('success', 'User Registration Successfully');
-
-
-            return response()->json(['success' => 'Validation Passed']);
+            return response()->json(['success' => 'Validation Passed', 'redirect' => route('account.login')]);
         } else {
             return response()->json([
                 'status' => false,
@@ -46,17 +47,19 @@ class AccountController extends Controller
             ]);
         }
     }
+
     public function authenticate(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required'
         ]);
+
         if ($validator->passes()) {
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 return redirect()->route('account.profile');
             } else {
-                return redirect()->route('account.login')->with('error', 'Invalid Email or Password');
+                return redirect()->route('account.login')->with('error', 'Invalid Email or Password')->withInput();
             }
         } else {
             return redirect()->route('account.login')->withErrors($validator)->withInput($request->only('email'));
@@ -65,7 +68,6 @@ class AccountController extends Controller
 
     public function profile()
     {
-
         $id = Auth::user()->id;
         $user = User::find($id);
 
@@ -81,6 +83,7 @@ class AccountController extends Controller
             'name' => 'required|min:5|max:20',
             'email' => 'required|email|unique:users,email,' . $id . ',id',
         ]);
+
         if ($validator->passes()) {
             $user = User::find($id);
             $user->name = $request->name;
@@ -101,16 +104,37 @@ class AccountController extends Controller
                 'errors' => $validator->errors()
             ]);
         }
+    }
 
-
-
+    public function updateProfilePic(Request $request)
+    {
         $id = Auth::user()->id;
-        $user = User::find($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->save();
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image'
+        ]);
 
-        return redirect()->route('account.profile')->with('success', 'Profile Updated Successfully');
+        if ($validator->passes()) {
+            $image = $request->file('image'); // Fix file input handling
+            $ext = $image->getClientOriginalExtension(); // Correct method name
+            $imageName = $id . '.' . time() . '.' . $ext;
+            $image->move(public_path('/profile_pic/'), $imageName);
+
+            $user = User::find($id);
+            $user->image = $imageName;
+            $user->save();
+
+            session()->flash('success', 'Profile Picture Updated Successfully');
+
+            return response()->json([
+                'status' => true,
+                'error' => []
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
     }
 
     public function logout()

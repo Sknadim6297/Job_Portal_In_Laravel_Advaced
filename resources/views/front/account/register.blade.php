@@ -1,6 +1,6 @@
 @extends('front.layouts.app')
 @section('main')
-<div class="flex items-center justify-center min-h-screen mt-10">
+<div class="flex items-center justify-center min-h-screen mt-28">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 class="text-2xl  mb-4 text-center">
             Sign Up to <span class="font-bold text-blue-500">Sk.Jobs.com</span>

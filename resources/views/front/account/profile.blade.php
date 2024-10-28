@@ -1,7 +1,7 @@
 @extends('front.layouts.app')
 
 @section('main')
-<section class="section-5 bg-2">
+<section class="section-5 bg-2 mt-10">
     <div class="container py-5">
         @if ($errors->any())
     <div class="alert alert-danger">

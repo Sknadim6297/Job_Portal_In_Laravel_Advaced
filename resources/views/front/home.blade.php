@@ -1,9 +1,9 @@
 @extends('front.layouts.app')
 @section('main')
-<section class="text-center py-16">
+<section class="text-center py-16 mt-20">
     <h3 class="text-blue-500 text-sm uppercase tracking-wide mb-2">#1 Job Portal</h3>
     <h1 class="text-4xl md:text-5xl font-bold mb-4">
-      Build your very own job portal with <span class="text-blue-600">Jobtale</span>
+      Build Your Very Own Job Portal <br>  With <span class="text-blue-600">Sk.Job.com</span>
     </h1>
     <p class="text-gray-600 mb-8">
       Discover your next career move with confidence and ease.

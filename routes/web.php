@@ -16,8 +16,11 @@ Route::group(['middleware' => 'guest'], function () {
 
 // Authenticated (Protected) Routes
 Route::group(['middleware' => 'auth'], function () {
-   Route::get('/account/profile', [AccountController::class, 'profile'])->name('account.profile');
+   Route::match(['get', 'post'], '/account/profile', [AccountController::class, 'profile'])->name('account.profile');
+
    Route::get('/account/logout', [AccountController::class, 'logout'])->name('account.logout');
    Route::put('/account/update', [AccountController::class, 'updateProfile'])->name('account.update');
    Route::post('/account/change-password', [AccountController::class, 'changePassword'])->name('account.password.update');
+   Route::post('/account/update-profile-pic', [AccountController::class, 'updateProfilePic'])->name('account.updateprofilepic');
+
 });
