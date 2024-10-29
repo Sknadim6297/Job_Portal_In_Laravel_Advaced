@@ -40,8 +40,8 @@
 			<!-- Check if User is Authenticated -->
 			@if(Auth::check())
 			<div class="flex items-center space-x-3">
-				@if(Auth::user()->profile_image)
-					<img src="{{ asset('storage/profile_images/' . Auth::user()->profile_image) }}" alt="{{ Auth::user()->name }}" class="w-10 h-10 rounded-full">
+				@if(Auth::user()->image)
+					<img src="{{ asset('profile_pic/'.Auth::user()->image) }}" alt="{{ Auth::user()->name }}" class="w-10 h-10 rounded-full">
 				@else
 					<img src="https://via.placeholder.com/40" alt="{{ Auth::user()->name }}" class="w-10 h-10 rounded-full">
 				@endif
@@ -182,7 +182,6 @@ $("#profilePicForm").submit(function(e) {
         success: function(response) {
      if(response.status == true){
          window.location.href = "{{ route('account.profile') }}";
-         alert('Profile Picture updated successfully');
 
         }else{
             var errors = response.errors;

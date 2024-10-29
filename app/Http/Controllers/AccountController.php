@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Faker\Core\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File as FacadesFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -122,6 +124,9 @@ class AccountController extends Controller
             $user = User::find($id);
             $user->image = $imageName;
             $user->save();
+        
+            FacadesFile::delete(public_path('/profile_pic/' . Auth::user()->image));
+            FacadesFile::delete(public_path('/profile_pic/' . Auth::user()->image));
 
             session()->flash('success', 'Profile Picture Updated Successfully');
 
